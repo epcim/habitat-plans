@@ -2,18 +2,11 @@
 
 ## Simple workflow routine to fetch and sync community plans
 
-#Inspired by:
-# - https://syslog.ravelin.com/multi-to-mono-repository-c81d004df3ce
-# - https://github.com/unravelin/tomono
-# - https://leewc.com/articles/how-to-merge-multiple-git-repositories-into-one-repo/
-# - https://github.com/metacloud/gilt
-# - https://github.com/capr/multigit
-
-
 P=./
-W=.worktree
+W=.branches
 declare -a FETCHED=()
 FETCH_WITH_ALL_DEPS=false
+SYMLINK_PLAN_BRANCH=false
 #set -x
 
 plans() {
@@ -62,30 +55,34 @@ function hooks() {
 
 function git-all() {
   # git push/commit/... changes from all plans to branch on "meta" origin
-  for p in $(ls -d ./*/); do
-    pushd $p
-    echo -e "\n# git-all: $(basename $PWD)"
-    case "$1" in
-      push)
-        git push origin PLAN_ORIG/PLAN_BRANCH
-      ;;
-      commit)
-        git commit $@
-      ;;
-      *)
-        echo "Unsupported action for git-all function: $1"
-      ;;
-    esac
-    popd
-  done
+  case "$1" in
+    push)
+      git push --all origin
+    ;;
+    commit)
+      for p in $(ls -d ./*/); do
+        pushd $p
+        echo -e "\n# git-all: $(basename $PWD)"
+            git commit $@
+        popd
+      done
+    ;;
+    add)
+      find . -type l | xargs -n1 git add
+    ;;
+    *)
+      echo "Unsupported action for git-all function: $1"
+    ;;
+  esac
 }
 
 function update() {
-      pushd $1
-      git stash
-      git pull -r
-      git stash pop || true
-      popd
+  pushd $1
+  #FIXME, seems it can be dangerous to stash/pop when no changes (as pop may lay down other stashed changes)
+  git stash
+  git pull -r
+  git stash pop || true
+  popd
 }
 
 function use() {
@@ -107,6 +104,10 @@ function deps() {
   echo "${pkg_deps[@]} ${pkg_build_deps[@]}" |xargs -n1 --no-run-if-empty |awk -F'/' '{print $1"/"$2}'
 }
 
+function dirdiff() {
+  git diff --no-index "$1" "$2" | colordiff;
+}
+
 function get() {
   # get core/etcd
   # get core/etcd --track core/staging -b core/etcd_staging
@@ -124,26 +125,65 @@ function get() {
       # fetch remote + add checkout to local worktree branch
       if [[ $# -gt 1 ]]; then
         git fetch $origin
+        # --no-checkout
         git worktree add -b "$plan" $W/$@         # arg. expansion!
       else
         git fetch $origin master
+        # --no-checkout
         git worktree add -b "$plan" $W/$plan --track $origin/master
       fi
 
-      # TODO: support to add plan under custom name ?
-      ln -sf $W/$plan/$name $name || ln -sf $W/$plan $name
-      FETCHED+=($name)
+      # monolitic repo -> sparse checkout
+      if [[ -e $W/$plan/$name ]]; then
+        sparse_checkout $W/$plan/$name $name
+      fi
+
+      if ${SYMLINK_PLAN_BRANCH}; then
+        ln -sf $W/$plan/$name $name || ln -sf $W/$plan $name
+      else
+        rsync -avhLk --exclude '.git*' --filter=':- $W/$plan/.gitignore' $(plan_dir $plan $name)/ $name
+      fi
 
     else
-      # pull/rebase plan branch
       update $W/$plan
+      dirdiff $name $(plan_dir $plan $name) || true
     fi
+
+    FETCHED+=($name)
 
     # dependencies
     if ${FETCH_WITH_ALL_DEPS}; then
       for p in $(deps $name); do get $p; done
     fi
   fi
+}
+
+function plan_dir() {
+  # monolitic/single repo ?
+  plan=$1
+  name=$2
+
+  if [[ -e $W/$plan/$name ]]; then
+    echo $W/$plan/$name
+  else
+    echo $W/$plan
+  fi
+}
+
+sparse_checkout() {
+  repo=$1
+  name=$2
+
+  pushd $repo
+  # sparse=.git/worktree/$name/info/sparse-checkout
+  sparse=$(git rev-parse --git-path info/sparse-checkout)
+  if ! $(grep $name $sparse > /dev/null 2>/dev/null ); then
+    git config core.sparseCheckout true
+    mkdir -p $(dirname $sparse)
+    echo "$name" > $sparse
+    git read-tree -mu HEAD
+  fi
+  popd
 }
 
 pushd () {
@@ -197,12 +237,21 @@ ask () {
   done
 }
 
+# not used
+function update-master() {
+  git checkout develop
+  path_master=$(git worktree list --porcelain | grep 'origin/master' | awk '/^worktree/{print $2}')
+  ask "Really rewrite master branch ($path_master) with the content of current dir/branch?" N && \
+    rsync -avhLk --delete-after --exclude '.*' --filter=':- .gitignore' $PWD/ $path_master
+}
+
+
 # allow to be sourced to use functions independently
 if [[ "$BASH_SOURCE" == "$0" ]]; then
   set -eu -o pipefail
   [[ -e $W ]] || mkdir -p $W
   [[ -e $P ]] || mkdir -p $P
-  if [[ $# -gt 1 ]]; then
+  if [[ $# -gt 0 ]]; then
     fn=$1
     shift
     $fn $@
