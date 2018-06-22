@@ -1,7 +1,9 @@
 #!/bin/bash
 
+W=.branches
+
 # list community scripts, etc..
-ls -l .worktree/*/*.sh
+ls -l $W/*/*.sh
 
 # update maintainer
 grep -l pkg_maintainer **/plan.sh | xargs -n1 sed -i 's/^pkg_maintainer=.*/pkg_maintainer="Petr Michalec <epcim@apealive.net>"/g'
