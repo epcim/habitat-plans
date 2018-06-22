@@ -18,6 +18,10 @@ pkg_exports=(
 )
 pkg_exposes=(port)
 
+pkg_binds_optional=(
+  [backend]="{{ cfg.backend.storage }}.{{ cfg.hab.service_group }}"
+)
+
 do_unpack() {
   cd "${HAB_CACHE_SRC_PATH}" || exit
   unzip ${pkg_filename} -d "${pkg_name}-${pkg_version}"
