@@ -78,10 +78,10 @@ function git-all() {
 
 function update() {
   pushd $1
-  #FIXME, seems it can be dangerous to stash/pop when no changes (as pop may lay down other stashed changes)
-  git stash
-  git pull -r
-  git stash pop || true
+  tracking=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+  git fetch ${tracking//\// }
+  git rebase $tracking
+  git pull --no-commit
   popd
 }
 
@@ -123,7 +123,7 @@ function get() {
       mkdir -p $W/$origin
 
       # fetch remote + add checkout to local worktree branch
-      if [[ $# -gt 2 ]]; then
+      if [[ $# -gt 1 ]]; then
         git fetch $origin
         # --no-checkout
         git worktree add -b "$plan" $W/$@         # arg. expansion!
