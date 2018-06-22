@@ -34,12 +34,16 @@ To commit all modified branches use:
     ./Planfile git-all add .
     ./Planfile git-all commit -m "Xyz"
 
+    # push all local branches to origin
+    git push --all origin
+
+
 ### Planfile usage
 
 In general, the Planfile is reusable for any repo.
 
     # prereq
-    apt-get install collordiff git direnv
+    apt-get install collordiff git direnv rsync
 
     # fetch plans
     ./Planfile

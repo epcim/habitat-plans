@@ -6,7 +6,6 @@ P=./
 W=.branches
 declare -a FETCHED=()
 FETCH_WITH_ALL_DEPS=false
-SYMLINK_PLAN_BRANCH=false
 #set -x
 
 plans() {
@@ -18,7 +17,7 @@ plans() {
   use eeyun https://github.com/eeyun/habitat-plans
   use starkandwayne https://github.com/starkandwayne/habitat-plans
 
-  if ask "Get/Sync from upstream?" Y; then
+  if ask "Get/Sync upstream?" Y; then
 
     # origin/plan [--track core/develop]
     get core/etcd
@@ -48,7 +47,7 @@ function hooks() {
 }
 
 function git-all() {
-  # iterate over all remote plan origins
+  # iterate over all "remote plan branches"
   for p in $(git worktree list | awk "/$W/{print \$1}"); do
     pushd $p
     echo -e "\n# git-all: $(basename $PWD)"
@@ -106,7 +105,7 @@ function get() {
       # fetch remote + add checkout to local worktree branch
       if [[ $# -gt 1 ]]; then
         git fetch $origin
-        # --no-checkout
+        # todo, --no-checkout can be used if we would be able to recognise late its monastic repo
         git worktree add -b "$plan" $W/$@         # arg. expansion!
       else
         git fetch $origin master
@@ -115,15 +114,12 @@ function get() {
       fi
 
       # monolitic repo -> sparse checkout
+      # todo, assume, git ls/check repo/plan.sh exist? no->monolitic
       if [[ -e $W/$plan/$name ]]; then
         sparse_checkout $W/$plan/$name $name
       fi
 
-      if ${SYMLINK_PLAN_BRANCH}; then
-        ln -sf $W/$plan/$name $name || ln -sf $W/$plan $name
-      else
-        rsync -avhLk --exclude '.git*' --filter=':- $W/$plan/.gitignore' $(plan_dir $plan $name)/ $name
-      fi
+      rsync -avhLk --exclude '.git*' --filter=':- $W/$plan/.gitignore' $(plan_dir $plan $name)/ $name
 
     else
       update $W/$plan
@@ -156,8 +152,7 @@ sparse_checkout() {
   name=$2
 
   pushd $repo
-  # sparse=.git/worktree/$name/info/sparse-checkout
-  sparse=$(git rev-parse --git-path info/sparse-checkout)
+  sparse=$(git rev-parse --git-path info/sparse-checkout) #.git/worktree/$name/info/sparse-checkout
   if ! $(grep $name $sparse > /dev/null 2>/dev/null ); then
     git config core.sparseCheckout true
     mkdir -p $(dirname $sparse)
@@ -216,14 +211,6 @@ ask () {
    esac
 
   done
-}
-
-# not used
-function update-master() {
-  git checkout develop
-  path_master=$(git worktree list --porcelain | grep 'origin/master' | awk '/^worktree/{print $2}')
-  ask "Really rewrite master branch ($path_master) with the content of current dir/branch?" N && \
-    rsync -avhLk --delete-after --exclude '.*' --filter=':- .gitignore' $PWD/ $path_master
 }
 
 
