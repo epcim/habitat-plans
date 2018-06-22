@@ -20,9 +20,6 @@ plans() {
 
   if ask "Get/Sync from upstream?" Y; then
 
-    # stash uncommited changes
-    git stash
-
     # origin/plan [--track core/develop]
     get core/etcd
     get core/vault
@@ -38,9 +35,6 @@ plans() {
     get ncerny/kube-scheduler
     get ncerny/kube-apiserver
 
-    # apply work in-progress
-    git stash pop || true
-
   fi
 
   hooks
@@ -54,26 +48,13 @@ function hooks() {
 }
 
 function git-all() {
-  # git push/commit/... changes from all plans to branch on "meta" origin
-  case "$1" in
-    push)
-      git push --all origin
-    ;;
-    commit)
-      for p in $(ls -d ./*/); do
-        pushd $p
-        echo -e "\n# git-all: $(basename $PWD)"
-            git commit $@
-        popd
-      done
-    ;;
-    add)
-      find . -type l | xargs -n1 git add
-    ;;
-    *)
-      echo "Unsupported action for git-all function: $1"
-    ;;
-  esac
+  # iterate over all remote plan origins
+  for p in $(git worktree list | awk "/$W/{print \$1}"); do
+    pushd $p
+    echo -e "\n# git-all: $(basename $PWD)"
+        git $@
+    popd
+  done
 }
 
 function update() {

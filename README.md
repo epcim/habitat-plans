@@ -30,6 +30,8 @@ To push all branches, use:
 
 To commit all modified branches use:
 
+    ./Planfile git-all status
+    ./Planfile git-all add .
     ./Planfile git-all commit -m "Xyz"
 
 ### Planfile usage
