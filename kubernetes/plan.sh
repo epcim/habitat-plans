@@ -1,5 +1,5 @@
 pkg_name=kubernetes
-pkg_origin=ncerny
+pkg_origin=epcim
 pkg_version="1.10.4"
 pkg_shasum="e2381459ba91674b5e5cc10c8e8d6dc910e71874d01165ca07a94188edc8505e"
 pkg_description="Production-Grade Container Scheduling and Management"

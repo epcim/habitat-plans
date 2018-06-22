@@ -1,8 +1,8 @@
 pkg_name=kube-master
-pkg_origin=ncerny
+pkg_origin=epcim
 pkg_version="0.1.0"
 pkg_type="composite"
-pkg_maintainer="Nathan Cerny <ncerny@gmail.com>"
+pkg_maintainer="Petr Michalec <epcim@apealive.net>"
 pkg_license=("Apache-2.0")
 
 pkg_services=(

@@ -1,11 +1,11 @@
 pkg_name=cacerts
-pkg_origin=core
+pkg_origin=epcim
 pkg_description="\
 The Mozilla CA certificate store in PEM format (around 250KB uncompressed).
 "
 pkg_upstream_url="https://curl.haxx.se/docs/caextract.html"
 pkg_license=('MPL-2.0')
-pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
+pkg_maintainer="Petr Michalec <epcim@apealive.net>"
 pkg_source="http://curl.haxx.se/ca/cacert.pem"
 pkg_deps=()
 pkg_build_deps=()

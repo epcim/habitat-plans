@@ -1,8 +1,8 @@
-pkg_origin=ncerny
+pkg_origin=epcim
 pkg_name=kube-etcd
 pkg_description="Distributed reliable key-value store for the most critical data of a distributed system"
 pkg_version="1.10.2"
-pkg_maintainer="Nathan Cerny <ncerny@gmail.com>"
+pkg_maintainer="Petr Michalec <epcim@apealive.net>"
 pkg_license=('Apache-2.0')
 
 case ${pkg_version%.*} in

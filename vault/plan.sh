@@ -1,8 +1,8 @@
-pkg_origin=core
+pkg_origin=epcim
 pkg_name=vault
 pkg_version=0.10.2
 pkg_description="A tool for managing secrets."
-pkg_maintainer='The Habitat Maintainers <humans@habitat.sh>'
+pkg_maintainer="Petr Michalec <epcim@apealive.net>"
 pkg_license=("MPL-2.0")
 pkg_upstream_url=https://www.vaultproject.io/
 pkg_source=https://releases.hashicorp.com/vault/${pkg_version}/vault_${pkg_version}_linux_amd64.zip
