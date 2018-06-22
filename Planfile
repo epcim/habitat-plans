@@ -123,7 +123,7 @@ function get() {
       mkdir -p $W/$origin
 
       # fetch remote + add checkout to local worktree branch
-      if [[ $# -gt 1 ]]; then
+      if [[ $# -gt 2 ]]; then
         git fetch $origin
         # --no-checkout
         git worktree add -b "$plan" $W/$@         # arg. expansion!
