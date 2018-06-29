@@ -9,7 +9,7 @@ ls -l $W/*/*.sh
 grep -l pkg_maintainer **/plan.sh | xargs -n1 sed -i 's/^pkg_maintainer=.*/pkg_maintainer="Petr Michalec <epcim@apealive.net>"/g'
 
 # update origin
-for origin in $(egrep pkg_origin= **/plan.sh | awk -F= '{print $2}' | sort -u | grep -v 'epcim\|core' ); do
+for origin in $(egrep pkg_origin= **/plan.sh | awk -F= '{print $2}' | sort -u | grep -v 'epcim\|apealive' ); do
   grep -l $origin **/plan.sh | xargs -n1 sed -i 's/^pkg_origin=.*/pkg_origin=epcim/g'
 
   # NOTE: be care-full here !

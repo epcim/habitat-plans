@@ -30,9 +30,9 @@ To push all branches, use:
 
 To commit all modified branches use:
 
-    ./Planfile git-all status
-    ./Planfile git-all add .
-    ./Planfile git-all commit -m "Xyz"
+    ./Planfile worktree status
+    ./Planfile worktree add .
+    ./Planfile worktree commit -m "Xyz"
 
     # push all local branches to origin
     git push --all origin

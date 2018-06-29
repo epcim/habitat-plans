@@ -19,10 +19,14 @@ plans() {
 
   if ask "Get/Sync upstream?" Y; then
 
+    # pre-fetch all existing branches on mine habitat-plans repo
+    git fetch origin
+
     # origin/plan [--track core/develop]
     get core/etcd
     get core/vault
     get core/cacerts
+    get core/consul
     get ncerny/cfssl
     get ncerny/kubernetes
     get ncerny/kube-etcd
@@ -46,7 +50,9 @@ function hooks() {
   fi
 }
 
-function git-all() {
+
+alias git-all=worktree
+function worktree() {
   # iterate over all "remote plan branches"
   for p in $(git worktree list | awk "/$W/{print \$1}"); do
     pushd $p
