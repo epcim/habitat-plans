@@ -1,0 +1,18 @@
+
+etcd-name = "valut-etcd"
+#etcd-client-end = 2379
+#etcd-server-end = 2380
+etcd-auto-tls = "false"
+etcd-http-proto = "https"
+
+etcd-trusted-ca-file      = "{{pkg.svc_files_path}}/ca.pem"
+etcd-peer-trusted-ca-file = "{{pkg.svc_files_path}}/ca.pem"
+etcd-cert-file            = "{{pkg.svc_files_path}}/vault-etcd-server.pem"
+etcd-key-file             = "{{pkg.svc_files_path}}/vault-etcd-server-key.pem"
+etcd-peer-cert-file       = "{{pkg.svc_files_path}}/vault-etcd-peer.pem"
+etcd-peer-key-file        = "{{pkg.svc_files_path}}/vault-etcd-peer-key.pem"
+
+etcd-initial-cluster-state = "new"
+etcd-initial-cluster-token = "vault-etcd-cluster-1"
+
+#etcd-env-vars-file = ""
