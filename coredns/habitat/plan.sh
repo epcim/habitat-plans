@@ -1,5 +1,5 @@
 pkg_name=coredns
-pkg_origin=jonathantron
+pkg_origin=epcim
 pkg_version="1.2.0"
 pkg_maintainer="Jonathan Tron <jonathan@tron.name>"
 pkg_license=('Apache-2.0')
