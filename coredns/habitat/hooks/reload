@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Reload configuration gracefully rather than kill + run
+kill -USR1 $(cat {{pkg.svc_pid_file}})

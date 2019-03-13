@@ -1,0 +1,18 @@
+{{~#each cfg.zones as |zone|}}
+{{zone.name}}{{#if zone.port}}:{{zone.port}}{{/if}} {
+  {{~#if zone.file}}
+  file {{../pkg.svc_config_path}}/zones/{{zone.file}}{{#each zone.file-params as |param|}} {{param}}{{/each}}{{~#if zone.file-options}} {
+  {{~#each plugin.file-options as |option|}}
+    {{option}}
+  {{~/each}}
+  }{{~/if}}
+  {{~/if}}
+  {{~#each zone.plugins as |plugin|}}
+  {{plugin.name}}{{#each plugin.params as |param|}} {{param}}{{/each}}{{~#if plugin.options}} {
+  {{~#each plugin.options as |option|}}
+    {{option}}
+  {{~/each}}
+  }{{~/if}}
+  {{~/each}}
+}
+{{~/each}}

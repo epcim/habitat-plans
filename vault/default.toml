@@ -3,17 +3,9 @@
 [dev]
 mode = true
 
-[storage]
-engine = "consul"
-location = "127.0.0.1"
-port = "8500"
+[backend]
+storage = "file"
 path = "vault"
-
-[storage.tls]
-enabled = false
-cert_file = ""
-key_file = ""
-ca_file = ""
 
 [listener]
 type = "tcp"
@@ -21,17 +13,5 @@ location = "127.0.0.1"
 port = "8200"
 tls_disable = "1"
 
-[listener.tls]
-enabled = false
-cert_file = ""
-key_file = ""
-ca_file = ""
-min_version = "tls12"
-
-[ui]
-enabled = false
-
-[hab]
-service_group = "default"
-
-
+[server]
+ui = true

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+exec 2>&1
+exec coredns \
+  {{~#if cfg.cpu }}
+  -cpu="{{cfg.cpu}}" \
+  {{~/if}}
+  -dns.port="{{cfg.port}}" \
+  -conf="{{pkg.svc_config_path}}/Corefile"
+

@@ -1,0 +1,45 @@
+port=53
+prometheus_port=9153
+cpu="100%"
+log=true
+
+# [[zones]]
+# name = "demo.com"
+# file = "demo.com.db"
+# file-params = []
+# file-options = []
+# file-content="""
+# $ORIGIN demo.com.
+# @ 3600 IN SOA ns1.demo.com. postmaster.demo.com. (
+#         2017042747 ; serial
+#         7200       ; refresh (2 hours)
+#         3600       ; retry (1 hour)
+#         1209600    ; expire (2 weeks)
+#         3600       ; minimum (1 hour)
+#         )
+#        IN NS    ns1.demo.com.
+# ns1    IN A     192.168.0.2
+# host1  IN A     192.168.0.10
+# """
+#   [[zones.plugins]]
+#   name = "prometheus"
+#   [[zones.plugins]]
+#   name = "errors"
+#   [[zones.plugins]]
+#   name = "log"
+
+# [[zones]]
+# name = "."
+#   [[zones.plugins]]
+#   name = "proxy"
+#   params = [".", "8.8.8.8:53", "8.8.4.4:53"]
+#   options = ["protocol https_google"]
+#   [[zones.plugins]]
+#   name = "prometheus"
+#   [[zones.plugins]]
+#   name = "errors"
+#   [[zones.plugins]]
+#   name = "log"
+#   [[zones.plugins]]
+#   name = "cache"
+#   params = ["30"]

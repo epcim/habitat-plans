@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# We need to create file to host configuration for zones using the file plugin
+zones_path="{{pkg.svc_config_path}}/zones"
+
+# Ensure zones directory exists
+mkdir -p "${zones_path}"
+
+{{~#each cfg.zones as |zone|}}
+{{~#if zone.file}}
+cat <<'EOF' > "${zones_path}/{{zone.file}}"
+{{zone.file-content}}
+EOF
+{{~/if}}
+{{~/each}}

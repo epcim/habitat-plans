@@ -1,18 +1,14 @@
 #!/bin/bash
+W=./
+which gsed >/dev/null && sed=$(which gsed)
 
-W=.branches
-
-# list community scripts, etc..
-ls -l $W/*/*.sh
+# list community scripts
+ls -l $W/*/*.sh | grep -v 'plan.sh'
 
 # update maintainer
-grep -l pkg_maintainer **/plan.sh | xargs -n1 sed -i 's/^pkg_maintainer=.*/pkg_maintainer="Petr Michalec <epcim@apealive.net>"/g'
+# grep -l pkg_maintainer **/plan.sh | xargs -n1 $sed -i 's/^pkg_maintainer=.*/pkg_maintainer="Petr Michalec <epcim@apealive.net>"/g'
 
 # update origin
 for origin in $(egrep pkg_origin= **/plan.sh | awk -F= '{print $2}' | sort -u | grep -v 'epcim\|apealive' ); do
-  grep -l $origin **/plan.sh | xargs -n1 sed -i 's/^pkg_origin=.*/pkg_origin=epcim/g'
-
-  # NOTE: be care-full here !
-  #grep -l $origin **/plan.sh | xargs -n1 sed -i "s:$origin/:epcim/:g";
-
+  grep -l $origin **/plan.sh | xargs -n1 $sed -i 's/^pkg_origin=.*/pkg_origin=epcim/g'
 done;

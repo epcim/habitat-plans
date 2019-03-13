@@ -1,0 +1,54 @@
+
+# DSL like configuration
+
+use core https://github.com/habitat-sh/core-plans
+use jtron https://github.com/JonathanTron/hab-plans
+use ncerny https://github.com/ncerny/habitat-plans
+
+#use qago https://github.com/qago/habitat-plans
+#use jarvus https://github.com/JarvusInnovations/habitat-plans
+#use eeyun https://github.com/eeyun/habitat-plans
+#use starkandwayne https://github.com/starkandwayne/habitat-plans
+
+git remote -v | grep fetch | column -t
+
+# stash first
+# repo_is_clean || say "There are uncommitted changes in the repository. Stash them first." 1
+
+# example: origin:path/to/plan [local/path/to/plan] [-b branch]
+section ncerny:kubernetes
+section ncerny:kube-scheduler
+section ncerny:kube-master
+section ncerny:kube-etcd
+section ncerny:kube-etcd
+section ncerny:kube-controller-manager
+section ncerny:kube-apiserver
+section ncerny:etcd32
+section ncerny:etcd31
+section ncerny:cfssl
+section jtron:coredns/habitat coredns
+section core:vault
+section core:nginx
+section core:haproxy
+section core:etcd
+section core:consul
+section core:cacerts
+
+
+
+# hooks provides automation for tracked upstream
+cross_post_hook() {
+  ask "Vendor plans?" N && {
+    echo "TODO, update author/maintenance info"
+  }
+}
+
+# cross_dependencies, is virtual function to list Plan dependencies for git-cross
+cross_dependencies() {
+  [[ -n "$1" ]] || say "DEPS called without an argument: plan name"
+  plan=$1/plan.sh
+  #eval "$(sed -e '/^[pkgcaseiffor].*/,/^[)]/!d' -e '/_map\|exports\|binds=.*/,/^[)]/d' $plan/plan.sh)" >/dev/null || true
+  #echo "${pkg_deps[@]:-''} ${pkg_build_deps[@]:-''}" | xargs -n 1 --no-run-if-empty | awk -F'/' '{print $1"/"$2}'
+}
+
+
