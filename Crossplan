@@ -16,23 +16,23 @@ git remote -v | grep fetch | column -t
 # repo_is_clean || say "There are uncommitted changes in the repository. Stash them first." 1
 
 # example: origin:path/to/plan [local/path/to/plan] [-b branch]
-section ncerny:kubernetes
-section ncerny:kube-scheduler
-section ncerny:kube-master
-section ncerny:kube-etcd
-section ncerny:kube-etcd
-section ncerny:kube-controller-manager
-section ncerny:kube-apiserver
-section ncerny:etcd32
-section ncerny:etcd31
-section ncerny:cfssl
-section jtron:coredns/habitat coredns
-section core:vault
-section core:nginx
-section core:haproxy
-section core:etcd
-section core:consul
-section core:cacerts
+patch ncerny:kubernetes
+patch ncerny:kube-scheduler
+patch ncerny:kube-master
+patch ncerny:kube-etcd
+patch ncerny:kube-etcd
+patch ncerny:kube-controller-manager
+patch ncerny:kube-apiserver
+patch ncerny:etcd32
+patch ncerny:etcd31
+patch ncerny:cfssl
+patch jtron:coredns/habitat coredns
+patch core:vault
+patch core:nginx
+patch core:haproxy
+patch core:etcd
+patch core:consul
+patch core:cacerts
 
 
 
