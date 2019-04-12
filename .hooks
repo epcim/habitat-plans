@@ -9,6 +9,6 @@ ls -l $W/*/*.sh | grep -v 'plan.sh'
 # grep -l pkg_maintainer **/plan.sh | xargs -n1 $sed -i 's/^pkg_maintainer=.*/pkg_maintainer="Petr Michalec <epcim@apealive.net>"/g'
 
 # update origin
-for plan in $(find $W -name plan.sh); do
+for plan in $(find $W -name "plan.*"); do
   $sed -i 's/^pkg_origin=.*/pkg_origin=epcim/g' $plan
 done;

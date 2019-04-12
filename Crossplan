@@ -45,10 +45,9 @@ cross_post_hook() {
 
 # cross_dependencies, is virtual function to list Plan dependencies for git-cross
 cross_dependencies() {
-  [[ -n "$1" ]] || say "DEPS called without an argument: plan name"
+  [[ -n "$1" ]] || say "DEPS called without an argument: plan_name"
   plan=$1/plan.sh
-  #eval "$(sed -e '/^[pkgcaseiffor].*/,/^[)]/!d' -e '/_map\|exports\|binds=.*/,/^[)]/d' $plan/plan.sh)" >/dev/null || true
-  #echo "${pkg_deps[@]:-''} ${pkg_build_deps[@]:-''}" | xargs -n 1 --no-run-if-empty | awk -F'/' '{print $1"/"$2}'
+  bin/print-deps.sh $plan | tail -n+2
 }
 
 
