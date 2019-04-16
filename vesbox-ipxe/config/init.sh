@@ -1,5 +1,6 @@
 
-cd {{ pkg_svc_data_path }}
+# run at pkg_svc_path/data
+cd $0 || exit 1
 
 # fetch bootstrap CD
 [[ -e ipxe.iso ]] && curl -qls http://boot.ipxe.org/ipxe.iso > ipxe.iso
