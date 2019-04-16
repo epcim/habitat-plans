@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-exec 2>&1
-
-cd "{{pkg.svc_path}}"
-
-# update vsb.ipxe
-[[ -f "config/vsb.ipxe" ]] && cp config/vsb.ipxe ./data/
-

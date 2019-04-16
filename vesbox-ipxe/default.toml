@@ -10,7 +10,6 @@ worker_processes = 4
 [events]
 worker_connections = 1024
 
-
 [http]
 sendfile = "on"
 tcp_nopush = "on"
@@ -19,3 +18,8 @@ keepalive_timeout = 60
 
 [http.listen]
 port = 80
+
+[http.server]
+server_name = "vesbox-ipxe"
+fqdn = "192.168.1.21"
+

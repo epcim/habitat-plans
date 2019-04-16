@@ -5,8 +5,11 @@ pkg_maintainer="Petr Michalec <pmichalec@ves.io>"
 pkg_license=("Apache-2.0")
 #pkg_source="http://some_source_url/releases/${pkg_name}-${pkg_version}.tar.gz"
 
-# ${pkg_version} or 1.15.11
-pkg_deps=(core/nginx/1.15.11)
+# ${pkg_version} or /1.15.11
+pkg_deps=(
+  core/nginx
+  core/curl
+)
 
 # pkg_build_deps=(core/make core/gcc)
 # pkg_lib_dirs=(lib)
@@ -34,15 +37,15 @@ pkg_deps=(core/nginx/1.15.11)
 
 
 # From nginx
-pkg_lib_dirs=(lib)
-pkg_bin_dirs=(sbin)
-pkg_include_dirs=(include)
-pkg_svc_run="nginx"
+#pkg_lib_dirs=(lib)
+#pkg_bin_dirs=(sbin)
+#pkg_include_dirs=(include)
+pkg_svc_run="nginx -c ${pkg_svc_config_path}/nginx.conf"
 pkg_svc_user="root"
 pkg_exports=(
   [port]=http.listen.port
 )
-pkg_exposes=(port)
+#pkg_exposes=(port)
 
 
 do_download() {
@@ -54,5 +57,5 @@ do_build() {
 }
 
 do_install() {
-  return 0
+ return 0
 }

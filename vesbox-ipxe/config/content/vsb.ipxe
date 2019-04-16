@@ -3,8 +3,8 @@
 :start
 echo
 echo Volterra iPXE
-set boot-url http://172.31.0.2/boot
-set menu-url http://172.31.0.2/vsb.ipxe
+set boot-url http://{{cfg.http.server.fqdn}}/boot
+set menu-url http://{{cfg.http.server.fqdn}}/vsb.ipxe
 # Figure out if client is 64-bit capable
 cpuid --ext 29 && set arch x64 || set arch x86
 cpuid --ext 29 && set archl amd64 || set archl i386
@@ -51,9 +51,9 @@ goto start
 ## CE
 :ves-ce-iso
 :ves-ce-iso-packet
-initrd ${boot-url}/ves-ce.iso
 set boot-url ${boot-url}/ves-ce-netboot
-kernel ${boot_url}/x86/memdisk iso console=ttyS1,115200n8 console=tty0 fb=false auto=true
+initrd ${boot-url}/../ves-ce.iso
+kernel ${boot-url}/x86/memdisk iso console=ttyS1,115200n8 console=tty0 fb=false auto=true
 boot || goto failed
 goto start
 
@@ -62,8 +62,8 @@ goto start
 # console=ttyS1,115200n8
 :ves-ce-netboot
 set boot-url ${boot-url}/ves-ce-netboot
-kernel ${boot-url}/finnix/boot/x86/linux64 console=ttyS1,115200n8 console=tty0 fb=false auto=true
-initrd ${boot-url}/finnix/boot/x86/initrd_net.xz
+kernel ${boot-url}/x86/linux64 console=ttyS1,115200n8 console=tty0 fb=false auto=true
+initrd ${boot-url}/x86/initrd_net.xz
 boot || goto failed
 goto start
 
@@ -71,9 +71,9 @@ goto start
 ## RE
 #  findiso=${boot-url}/ves-re78.iso vmalloc=2048M
 :ves-re-iso
-initrd ${boot-url}/ves-re78.iso
 set boot-url ${boot-url}/ves-re-netboot
-kernel ${boot_url}/x86/memdisk iso raw console=ttyS1,115200n8 console=tty0 fb=false auto=true
+initrd ${boot-url}/../ves-re82.iso
+kernel ${boot-url}/x86/memdisk iso console=ttyS1,115200n8 console=tty0 fb=false auto=true findiso=${boot-url}/ves-re82.iso vmalloc=2048M
 boot || goto failed
 goto start
 
