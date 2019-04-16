@@ -1,5 +1,5 @@
 pkg_name=nginx
-pkg_origin=core
+pkg_origin=epcim
 pkg_version=1.15.11
 pkg_description="NGINX web server."
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
