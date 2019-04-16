@@ -1,0 +1,21 @@
+
+# vesbox-ipxe is wraps nginx plan, it adds hooks & scripts to configure content for iPXE boot
+
+## iPXE configuration, None
+# behaviour is delivered through config/init.sh script and config/vsb.ipxe
+
+## NGINX configuration
+worker_processes = 4
+
+[events]
+worker_connections = 1024
+
+
+[http]
+sendfile = "on"
+tcp_nopush = "on"
+tcp_nodelay = "on"
+keepalive_timeout = 60
+
+[http.listen]
+port = 80

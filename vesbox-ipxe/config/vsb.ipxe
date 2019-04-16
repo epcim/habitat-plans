@@ -1,0 +1,102 @@
+#!ipxe
+
+:start
+echo
+echo Volterra iPXE
+set boot-url http://172.31.0.2/boot
+set menu-url http://172.31.0.2/vsb.ipxe
+# Figure out if client is 64-bit capable
+cpuid --ext 29 && set arch x64 || set arch x86
+cpuid --ext 29 && set archl amd64 || set archl i386
+
+:menu-volterra-edge
+set menu-timeout 0
+set menu-default ves-ce-netboot
+menu Volterra Edge (${arch})
+item --gap --             [CE Bootstrap]
+item ves-ce-iso           CE ISO
+item ves-ce-netboot       CE netboot, prefetched
+#item ves-ce-netboot-mini  CE netboot, minimal
+item
+item --gap --             [RE Bootstrap]
+item ves-re-iso           RE ISO
+item ves-re-netboot       RE netboot, prefetched
+#item ves-re-netboot-mini  RE netboot, minimal
+item
+item --gap --             [Other]
+item coreos-stable        CoreOS, stable
+item
+item --gap --             [Advanced options]
+item reload               Reload menu
+item reboot               Reboot computer
+item --key c config       Configure settings
+item shell                Drop to iPXE shell
+item
+item
+item --key 0x08 back             Back to top menu...
+item --key x exit                Exit iPXE and continue BIOS boot
+choose --timeout ${menu-timeout} --default ${menu-default} selected && goto ${selected} || goto start
+
+
+## RESCUE
+:coreos-stable
+echo Booting CoreOS Stable
+set base-url http://stable.release.core-os.net/amd64-usr/current
+kernel ${base-url}/coreos_production_pxe.vmlinuz coreos.autologin console=ttyS1,115200n8 cloud-config-url=http://matchbox/cloud coreos.autologin console=tty0
+initrd ${base-url}/coreos_production_pxe_image.cpio.gz
+boot || goto failed
+goto start
+
+
+## CE
+:ves-ce-iso
+:ves-ce-iso-packet
+initrd ${boot-url}/ves-ce.iso
+set boot-url ${boot-url}/ves-ce-netboot
+kernel ${boot_url}/x86/memdisk iso console=ttyS1,115200n8 console=tty0 fb=false auto=true
+boot || goto failed
+goto start
+
+# vga=791 nomodeset splash debug
+# console=ttyAMA0,115200
+# console=ttyS1,115200n8
+:ves-ce-netboot
+set boot-url ${boot-url}/ves-ce-netboot
+kernel ${boot-url}/finnix/boot/x86/linux64 console=ttyS1,115200n8 console=tty0 fb=false auto=true
+initrd ${boot-url}/finnix/boot/x86/initrd_net.xz
+boot || goto failed
+goto start
+
+
+## RE
+#  findiso=${boot-url}/ves-re78.iso vmalloc=2048M
+:ves-re-iso
+initrd ${boot-url}/ves-re78.iso
+set boot-url ${boot-url}/ves-re-netboot
+kernel ${boot_url}/x86/memdisk iso raw console=ttyS1,115200n8 console=tty0 fb=false auto=true
+boot || goto failed
+goto start
+
+:ves-re-netboot
+set boot-url ${boot-url}/ves-re-netboot
+kernel ${boot-url}/x86/linux64 console=ttyS1,115200n8 console=tty0 fb=false auto=true
+initrd ${boot-url}/x86/initrd_net.xz
+boot || goto failed
+goto start
+
+:config
+config
+goto start
+
+:reboot
+reboot
+
+:exit
+exit
+
+:failed
+echo Booting failed, dropping to shell
+goto shell
+
+:reload
+chain --replace --autofree ${menu-url} ||
