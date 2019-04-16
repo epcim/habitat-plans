@@ -33,6 +33,18 @@ pkg_deps=(core/nginx/1.15.11)
 # pkg_upstream_url="http://example.com/project-name"
 
 
+# From nginx
+pkg_lib_dirs=(lib)
+pkg_bin_dirs=(sbin)
+pkg_include_dirs=(include)
+pkg_svc_run="nginx"
+pkg_svc_user="root"
+pkg_exports=(
+  [port]=http.listen.port
+)
+pkg_exposes=(port)
+
+
 do_download() {
   return 0
 }
