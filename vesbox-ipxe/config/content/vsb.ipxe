@@ -1,10 +1,13 @@
 #!ipxe
 
-:start
-echo
-echo Volterra iPXE (http://{{cfg.http.server.fqdn}}/vsb.ipxe)
 set boot-url http://{{cfg.http.server.fqdn}}/boot
 set menu-url http://{{cfg.http.server.fqdn}}/vsb.ipxe
+
+:prereq
+set cmdline boot=live config hooks=filesystem username=live noeject fetch=${boot-url}/live/filesystem.squashfs console=ttyS1,115200n8 console=tty0 ip=frommedia nomodeset quiet
+
+:start
+echo
 # Figure out if client is 64-bit capable
 cpuid --ext 29 && set arch x64 || set arch x86
 cpuid --ext 29 && set archl amd64 || set archl i386
@@ -23,6 +26,10 @@ item ves-re               RE (bootstrap)
 item
 item --gap --             [Other]
 item coreos-stable        CoreOS, stable
+item
+item --gap --             [Configuration]
+item booturl              Configure live boot
+item cmdline              Configure kernel options
 item
 item --gap --             [Advanced options]
 item reload               Reload menu
@@ -46,6 +53,22 @@ choose --timeout ${menu-timeout} --default ${menu-default} selected && goto ${se
   # https://manpages.debian.org/testing/live-boot-doc/live-boot.7.en.html
   # https://willhaley.com/blog/custom-debian-live-environment/
 
+## UPDATE CFG
+:booturl
+echo
+echo -n Current boot-url: ${boot-url}
+echo -n (Note: IP is required for live-boot httpfs/fetch kernel option)
+echo
+echo -n Enter new value: && read boot-url
+goto prereq
+
+:cmdline
+echo
+echo -n Current kernel cmdline: ${cmdline}
+echo
+echo -n Enter new value: && read cmdline
+goto start
+
 ## RESCUE
 :coreos-stable
 echo Booting CoreOS Stable
@@ -61,7 +84,7 @@ goto start
 echo Booting Volterra bootstrap
 kernel ${boot-url}/vmlinuz
 initrd ${boot-url}/initrd
-imgargs vmlinuz boot=live config hooks=filesystem username=live noeject fetch=${boot-url}/live/filesystem.squashfs console=ttyS1,115200n8 console=tty0 ip=frommedia nomodeset
+imgargs vmlinuz ${cmdline}
 boot || goto failed
 goto start
 
