@@ -7,7 +7,7 @@ test -e boot || mkdir boot
 rsync -avh vesop@images.vedge.io:/dump/ves-ipxe/*${VERSION}* ./boot/ || exit 1
 
 # remove old
-ls -ti ./vsb-ves-re-*.iso | tail -n +4 | xargs -rt rm --
-ls -ti ./vsb-ves-ce-*.iso | tail -n +4 | xargs -rt rm --
-ls -ti ./vsb-ves-re-mini-*.iso | tail -n +4 | xargs -rt rm --
-ls -ti ./vsb-ves-ce-mini-*.iso | tail -n +4 | xargs -rt rm --
+ls -ti ./*ves-re-*.iso | tail -n +4 | xargs -rt rm --
+ls -ti ./*ves-ce-*.iso | tail -n +4 | xargs -rt rm --
+ls -ti ./*ves-re-mini-*.iso | tail -n +4 | xargs -rt rm --
+ls -ti ./*ves-ce-mini-*.iso | tail -n +4 | xargs -rt rm --
