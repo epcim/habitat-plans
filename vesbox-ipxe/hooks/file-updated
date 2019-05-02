@@ -1,0 +1,6 @@
+
+exec 2>&1
+cd "{{pkg.svc_path}}"
+
+# copy all uploaded files from files to data directory
+cp -v files/* data/ || true

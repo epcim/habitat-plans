@@ -1,0 +1,7 @@
+
+exec 2>&1
+
+cd "{{pkg.svc_data_path}}"
+
+# update index / update vsb.ipxe
+[[ -f "{{pkg.svc_config_path}}/content/vsb.ipxe" ]] && cp {{pkg.svc_config_path}}/content/vsb.ipxe {{ pkg.svc_data_path }}

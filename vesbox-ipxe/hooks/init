@@ -4,6 +4,6 @@ exec 2>&1
 cd "{{pkg.svc_path}}"
 
 # additional script, custom to fetch vsb.ipxe, coreos image, etc..
-[[ -f "{{pkg.svc_config_path}}/content/init.sh" ]] && bash {{pkg.svc_config_path}}/content/init.sh {{ pkg.svc_data_path }}
 [[ -f "{{pkg.svc_config_path}}/content/vsb.ipxe" ]] && cp {{pkg.svc_config_path}}/content/vsb.ipxe {{ pkg.svc_data_path }}
+[[ -f "{{pkg.svc_config_path}}/content/init.sh" ]] && bash {{pkg.svc_config_path}}/content/init.sh {{ pkg.svc_data_path }}
 

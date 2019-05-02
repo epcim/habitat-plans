@@ -1,8 +1,10 @@
 
 # vesbox-ipxe is wraps nginx plan, it adds hooks & scripts to configure content for iPXE boot
 
-## iPXE configuration, None
+## VES iPXE configuration, None
 # behaviour is delivered through config/init.sh script and config/vsb.ipxe
+[ves]
+image_revision = "" # empty = latest fetched
 
 ## NGINX configuration
 worker_processes = 4
@@ -17,9 +19,9 @@ tcp_nodelay = "on"
 keepalive_timeout = 60
 
 [http.listen]
-port = 80
+port = 8080
 
 [http.server]
 server_name = "vesbox-ipxe"
-fqdn = "192.168.1.21"
+fqdn = "192.168.10.1" # keep ip here, as long as its used for live-boot httpfs/fetch option
 

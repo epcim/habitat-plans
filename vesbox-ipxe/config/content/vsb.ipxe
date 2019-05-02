@@ -2,7 +2,7 @@
 
 :start
 echo
-echo Volterra iPXE
+echo Volterra iPXE (http://{{cfg.http.server.fqdn}}/vsb.ipxe)
 set boot-url http://{{cfg.http.server.fqdn}}/boot
 set menu-url http://{{cfg.http.server.fqdn}}/vsb.ipxe
 # Figure out if client is 64-bit capable
@@ -10,18 +10,16 @@ cpuid --ext 29 && set arch x64 || set arch x86
 cpuid --ext 29 && set archl amd64 || set archl i386
 
 :menu-volterra-edge
-set menu-timeout 0
-set menu-default ves-ce-netboot
+set menu-timeout 60000
+set menu-default ves-ce
 menu Volterra Edge (${arch})
-item --gap --             [CE Bootstrap]
-item ves-ce-iso           CE ISO
-item ves-ce-netboot       CE netboot, prefetched
-#item ves-ce-netboot-mini  CE netboot, minimal
-item
-item --gap --             [RE Bootstrap]
-item ves-re-iso           RE ISO
-item ves-re-netboot       RE netboot, prefetched
-#item ves-re-netboot-mini  RE netboot, minimal
+item --gap --             [Volterra]
+item ves-ce               CE (bootstrap)
+#item ves-ce-mini          CE (bootstrap, minimal)
+#item ves-ce-live          CE (live)
+item ves-re               RE (bootstrap)
+#item ves-re-mini          RE (bootstrap, minimal)
+#item ves-re-live          RE (live)
 item
 item --gap --             [Other]
 item coreos-stable        CoreOS, stable
@@ -37,6 +35,16 @@ item --key 0x08 back             Back to top menu...
 item --key x exit                Exit iPXE and continue BIOS boot
 choose --timeout ${menu-timeout} --default ${menu-default} selected && goto ${selected} || goto start
 
+## BACKLOG/NOTES
+# TODO, efi boot - https://gist.github.com/robinsmidsrod/4008017
+# TODO, boot nic - https://gist.github.com/robinsmidsrod/3871687
+# packet.com options
+  # vga=791 nomodeset splash debug
+  # console=ttyAMA0,115200
+  # console=ttyS1,115200n8
+# debian live-boot options
+  # https://manpages.debian.org/testing/live-boot-doc/live-boot.7.en.html
+  # https://willhaley.com/blog/custom-debian-live-environment/
 
 ## RESCUE
 :coreos-stable
@@ -48,41 +56,32 @@ boot || goto failed
 goto start
 
 
+## SHARED
+:debian-live
+echo Booting Volterra bootstrap
+kernel ${boot-url}/vmlinuz
+initrd ${boot-url}/initrd
+imgargs vmlinuz boot=live config hooks=filesystem username=live noeject fetch=${boot-url}/live/filesystem.squashfs console=ttyS1,115200n8 console=tty0 ip=frommedia nomodeset
+boot || goto failed
+goto start
+
 ## CE
-:ves-ce-iso
-:ves-ce-iso-packet
-set boot-url ${boot-url}/ves-ce-netboot
-initrd ${boot-url}/../ves-ce.iso
-kernel ${boot-url}/x86/memdisk iso console=ttyS1,115200n8 console=tty0 fb=false auto=true
-boot || goto failed
-goto start
+:ves-ce
+set boot-url ${boot-url}/ves-ce
+goto debian-live
 
-# vga=791 nomodeset splash debug
-# console=ttyAMA0,115200
-# console=ttyS1,115200n8
-:ves-ce-netboot
-set boot-url ${boot-url}/ves-ce-netboot
-kernel ${boot-url}/x86/linux64 console=ttyS1,115200n8 console=tty0 fb=false auto=true
-initrd ${boot-url}/x86/initrd_net.xz
-boot || goto failed
-goto start
-
+:ves-ce-mini
+set boot-url ${boot-url}/ves-ce-mini
+goto debian-live
 
 ## RE
-#  findiso=${boot-url}/ves-re78.iso vmalloc=2048M
-:ves-re-iso
-set boot-url ${boot-url}/ves-re-netboot
-initrd ${boot-url}/../ves-re82.iso
-kernel ${boot-url}/x86/memdisk iso console=ttyS1,115200n8 console=tty0 fb=false auto=true findiso=${boot-url}/ves-re82.iso vmalloc=2048M
-boot || goto failed
-goto start
+:ves-re
+set boot-url ${boot-url}/ves-re
+goto debian-live
 
-:ves-re-netboot
-set boot-url ${boot-url}/ves-re-netboot
-kernel ${boot-url}/x86/linux64 console=ttyS1,115200n8 console=tty0 fb=false auto=true
-initrd ${boot-url}/x86/initrd_net.xz
-boot || goto failed
-goto start
+:ves-re-mini
+set boot-url ${boot-url}/ves-re-mini
+goto debian-live
 
 :config
 config

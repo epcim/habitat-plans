@@ -1,0 +1,13 @@
+
+exec 2>&1
+
+cd "{{pkg.svc_data_path}}"
+
+# try to fetch latest VES .iso
+bash ./isofetch.sh {{cfg.ves.image_revision}} || true
+
+# try to mount images
+bash ./isomount.sh {{cfg.ves.image_revision}} || true
+
+# update index
+[[ -f "{{pkg.svc_config_path}}/content/init.sh" ]] && bash {{pkg.svc_config_path}}/content/init.sh {{ pkg.svc_data_path }}
