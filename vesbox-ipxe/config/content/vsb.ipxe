@@ -55,18 +55,16 @@ choose --timeout ${menu-timeout} --default ${menu-default} selected && goto ${se
 
 ## UPDATE CFG
 :booturl
+clear
+echo -n (IP is required for live-boot httpfs/fetch kernel option)
 echo
-echo -n Current boot-url: ${boot-url}
-echo -n (Note: IP is required for live-boot httpfs/fetch kernel option)
-echo
-echo -n Enter new value: && read boot-url
+echo -n Enter new boot-url: ${} && read boot-url
 goto prereq
 
 :cmdline
+clear
 echo
-echo -n Current kernel cmdline: ${cmdline}
-echo
-echo -n Enter new value: && read cmdline
+echo -n Enter new kernel cmdline: && read cmdline
 goto start
 
 ## RESCUE
@@ -77,7 +75,6 @@ kernel ${base-url}/coreos_production_pxe.vmlinuz coreos.autologin console=ttyS1,
 initrd ${base-url}/coreos_production_pxe_image.cpio.gz
 boot || goto failed
 goto start
-
 
 ## SHARED
 :debian-live
