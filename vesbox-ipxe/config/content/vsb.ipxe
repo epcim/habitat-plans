@@ -4,7 +4,7 @@ set boot-url http://{{cfg.http.server.fqdn}}/boot
 set menu-url http://{{cfg.http.server.fqdn}}/vsb.ipxe
 
 :prereq
-set cmdline boot=live config hooks=filesystem username=live noeject fetch=${boot-url}/live/filesystem.squashfs console=ttyS1,115200n8 console=tty0 ip=frommedia nomodeset quiet
+set cmdline boot=live config hooks=filesystem username=live noeject console=ttyS1,115200n8 console=tty0 ip=frommedia nomodeset quiet
 
 :start
 echo
@@ -55,14 +55,12 @@ choose --timeout ${menu-timeout} --default ${menu-default} selected && goto ${se
 
 ## UPDATE CFG
 :booturl
-clear
 echo -n (IP is required for live-boot httpfs/fetch kernel option)
 echo
 echo -n Enter new boot-url: ${} && read boot-url
 goto prereq
 
 :cmdline
-clear
 echo
 echo -n Enter new kernel cmdline: && read cmdline
 goto start
@@ -81,7 +79,7 @@ goto start
 echo Booting Volterra bootstrap
 kernel ${boot-url}/vmlinuz
 initrd ${boot-url}/initrd
-imgargs vmlinuz ${cmdline}
+imgargs vmlinuz fetch=${boot-url}/live/filesystem.squashfs ${cmdline}
 boot || goto failed
 goto start
 
