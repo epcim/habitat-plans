@@ -1,6 +1,6 @@
 pkg_name=vesbox-ipxe
 pkg_origin=epcim
-pkg_version="v0.1.3"
+pkg_version="v0.1.4"
 pkg_maintainer="Petr Michalec <pmichalec@ves.io>"
 pkg_license=("Apache-2.0")
 #pkg_source="http://some_source_url/releases/${pkg_name}-${pkg_version}.tar.gz"
