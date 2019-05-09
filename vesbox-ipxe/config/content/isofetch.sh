@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd $(dirname $0)
+
 VERSION="${1:-{{cfg.ves.image_revision}}}"
 [[ $VERSION =~ ^.*cfg ]] && VERSION=
 
