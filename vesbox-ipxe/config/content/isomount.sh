@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 VERSION="${1:-{{cfg.ves.image_revision}}}"
-[[ $VERSION =~ ^{{cfg ]] && VERSION=
+[[ $VERSION =~ ^.*cfg ]] && VERSION=
 
 # find and mount latest .iso
 # mount -o loop .iso in data directory to expected netboot folders
