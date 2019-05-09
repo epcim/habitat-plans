@@ -1,16 +1,16 @@
-#!/bin/bash
+#!/bin/bash -e
 
 cd $(dirname $0)
 
 VERSION="${1:-{{cfg.ves.image_revision}}}"
-[[ $VERSION =~ ^.*cfg ]] && VERSION=
+[[ $VERSION =~ "cfg" ]] && VERSION=
 
 # fetch .iso to bootstrap from upstream servers
 test -e boot || mkdir boot
-rsync -avh vesop@images.vedge.io:/dump/ves-ipxe/*${VERSION}* ./boot/ || exit 1
+rsync -avh vesop@images.vedge.io:/dump/ves-ipxe/*${VERSION}* ./boot/ || exit 0
 
-# remove old
-ls -ti ./*ves-re-*.iso | tail -n +4 | xargs -rt rm --
-ls -ti ./*ves-ce-*.iso | tail -n +4 | xargs -rt rm --
-ls -ti ./*ves-re-mini-*.iso | tail -n +4 | xargs -rt rm --
-ls -ti ./*ves-ce-mini-*.iso | tail -n +4 | xargs -rt rm --
+# housekeeping
+ls -ti ./boot/*ves-re-*.iso | tail -n +4 | xargs -rt rm --
+ls -ti ./boot/*ves-ce-*.iso | tail -n +4 | xargs -rt rm --
+ls -ti ./boot/*ves-re-mini-*.iso | tail -n +4 | xargs -rt rm --
+ls -ti ./boot/*ves-ce-mini-*.iso | tail -n +4 | xargs -rt rm --
