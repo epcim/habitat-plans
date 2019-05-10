@@ -1,7 +1,7 @@
 #!ipxe
 
-set boot-url http://{{cfg.http.server.fqdn}}/boot
-set menu-url http://{{cfg.http.server.fqdn}}/vsb.ipxe
+set boot-url http://{{cfg.http.server.fqdn}}:{{cfg.http.listen.port}}/boot
+set menu-url http://{{cfg.http.server.fqdn}}:{{cfg.http.listen.port}}/vsb.ipxe
 
 :prereq
 set cmdline boot=live config hooks=filesystem username=live noeject console=ttyS1,115200n8 console=tty0 ip=frommedia nomodeset quiet
