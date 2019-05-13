@@ -1,14 +1,26 @@
-#!/bin/bash -e
+#!/bin/bash
 
 BASE=$(dirname $0)
 DATA=$BASE/../data
 VERSION="${1:-{{cfg.ves.image_revision}}}"
 
+# get partition offset
+offset() {
+  IMAGE=$1
+  PART=$2
+  sfdisk -l $IMAGE | grep $IMAGE$PART |\
+  awk 'BEGIN { FS="[ *\t]+"}
+     /.+/ { print $2*512; found=1 }
+     END { if(!found) exit 1 }'\
+  || { echo "No such partition in the image"; exit 1; }
+}
+
 cd $DATA
 
 # extract
-bunzip2 vsb-$i*${VERSION}*.img.bz2 || true
+bunzip2 boot/vsb-$VERSION*.img.bz2 || true
 
+set -e
 # find and mount latest .img
 # mount -o loop .img in data directory to expected netboot folders
 for j in "ves-re" "ves-ce" "ves-re-mini" "ves-ce-mini"; do
@@ -17,10 +29,13 @@ for j in "ves-re" "ves-ce" "ves-re-mini" "ves-ce-mini"; do
     [[ -e boot/$j ]] || mkdir -p boot/$j
     mount | grep "boot/$j" &&\
       umount -f ./boot/$j
-    mount -o ro,loop $(basename $i .bz2) ./boot/$j
+    OFFSET=$(offset $i 3)
+    echo mount -o ro,loop,offset=$OFFSET $DATA/$i $DATA/boot/$j
+    #NOTE, mount sometimes returns "Invalid argument", next try it works
+    sleep 5
+    bash -c "/bin/mount -o loop,offset=$OFFSET $DATA/$i $DATA/boot/$j"
     test -e boot/$j/initrd
     test -e boot/$j/vmlinuz
     test -e boot/$j/live/filesystem.squashfs
   done
 done
-
