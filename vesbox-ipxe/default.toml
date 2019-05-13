@@ -3,11 +3,13 @@
 
 ## VES iPXE configuration, None
 # behaviour is delivered through config/init.sh script and config/vsb.ipxe
-[ves]
-image_revision = "" # empty = latest fetched
 
 ## NGINX configuration
 worker_processes = 4
+
+[ves]
+image_revision = "" # empty = latest fetched
+
 
 [events]
 worker_connections = 1024
@@ -23,5 +25,5 @@ port = 8080
 
 [http.server]
 server_name = "vesbox-ipxe"
-fqdn = "192.168.10.1" # keep ip here, as long as its used for live-boot httpfs/fetch option
+fqdn = "172.16.4.51" # keep ip here, as long as its used for live-boot httpfs/fetch option
 
