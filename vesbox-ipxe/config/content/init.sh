@@ -18,7 +18,7 @@ cat <<-EOF > index.html
     <li> <a href="./ipxe.efi.img">ipxe.efi.img</a> </li>
 EOF
 
-ls ves-* | xargs -r -I{}  echo "     <li> <a href="./{}">{}</a> </li>" >> index.html
+ls boot/ves-* | xargs -r -I{}  echo "     <li> <a href="./{}">{}</a> </li>" >> index.html
 
 cat <<-EOF >> index.html
   </ul>
