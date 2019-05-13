@@ -4,7 +4,7 @@ exec 2>&1
 cd "{{pkg.svc_path}}"
 
 # upload content content
-cp -v {{pkg.svc_config_path}}/content/*.sh {{ pkg.svc_file_path }} || true
+cp -v {{pkg.svc_config_path}}/content/*.sh {{ pkg.svc_files_path }} || true
 cp -v {{pkg.svc_config_path}}/content/*.ipxe {{ pkg.svc_data_path }} || true
 
 # initialize
