@@ -13,9 +13,9 @@ cat <<-EOF > index.html
   <body>
   <h1>Volterra VESBOX</h1>
   <ul>
-    <li> <a href="./ipxe.iso">ipxe.iso</a> </li>
-    <li> <a href="./ipxe.usb.img">ipxe.usb.img</a> </li>
-    <li> <a href="./ipxe.efi.img">ipxe.efi.img</a> </li>
+    <li> <a href="./boot/ipxe.iso">ipxe.iso</a> </li>
+    <li> <a href="./boot/ipxe.usb.img">ipxe.usb.img</a> </li>
+    <li> <a href="./boot/ipxe.efi.img">ipxe.efi.img</a> </li>
 EOF
 
 ls boot/*ves-* | xargs -r -I{}  echo "     <li> <a href="./{}">{}</a> </li>" >> index.html

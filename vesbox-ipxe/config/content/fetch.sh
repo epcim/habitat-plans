@@ -13,9 +13,9 @@ rsync -avh vesop@images.vedge.io:/dump/ves-ipxe/ipxe.* ./ || exit 0
 rsync -avh vesop@images.vedge.io:/dump/ves-ipxe/*${VERSION}* ./boot/ || exit 0
 
 # fetch boostrap ipxe images, failover
-[[ -e ipxe.iso ]] || curl -qls http://boot.ipxe.org/ipxe.iso > ipxe.iso
-[[ -e ipxe.usb ]] || curl -qls http://boot.ipxe.org/ipxe.usb > ipxe.usb.img
-[[ -e ipxe.efi ]] || curl -qls http://boot.ipxe.org/ipxe.efi > ipxe.efi.img
+[[ -e ipxe.iso ]] || curl -qls http://boot.ipxe.org/ipxe.iso > boot/ipxe.iso
+[[ -e ipxe.usb ]] || curl -qls http://boot.ipxe.org/ipxe.usb > boot/ipxe.usb.img
+[[ -e ipxe.efi ]] || curl -qls http://boot.ipxe.org/ipxe.efi > boot/ipxe.efi.img
 
 # housekeeping
 ls -ti ./boot/*ves-re-*.iso | tail -n +4 | xargs -rt rm --
