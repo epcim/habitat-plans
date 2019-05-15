@@ -63,7 +63,7 @@ goto prereq
 :cmdline
 echo -n (Docs: https://manpages.debian.org/testing/live-boot-doc/live-boot.7.en.html)
 echo
-echo -n Enter new kernel cmdline: && read cmdline
+echo -n Enter new kernel cmdline: && read cmd-line
 goto start
 
 ## RESCUE
@@ -80,7 +80,7 @@ goto start
 echo Booting Volterra bootstrap
 kernel ${boot-url}/vmlinuz
 initrd ${boot-url}/initrd
-imgargs vmlinuz fetch=${boot-url}/live/filesystem.squashfs ${cmdline}
+imgargs vmlinuz fetch=${boot-url}/live/filesystem.squashfs ${cmd-line}
 boot || goto failed
 goto start
 
