@@ -4,7 +4,7 @@ set boot-url http://{{cfg.http.server.fqdn}}:{{cfg.http.listen.port}}/boot
 set menu-url http://{{cfg.http.server.fqdn}}:{{cfg.http.listen.port}}/vsb.ipxe
 
 :prereq
-set cmdline boot=live config hooks=filesystem username=live noeject console=ttyS1,115200n8 console=tty0 ip=frommedia nomodeset quiet
+set cmd-line boot=live config hooks=filesystem username=live noeject console=ttyS1,115200n8 console=tty0 ip=frommedia nomodeset quiet
 
 :start
 echo
@@ -14,7 +14,7 @@ cpuid --ext 29 && set archl amd64 || set archl i386
 
 :menu-volterra-edge
 set menu-timeout 60000
-set menu-default ves-ce
+set menu-default ves-re
 menu Volterra Edge (${arch})
 item --gap --             [Volterra]
 item ves-ce               CE (bootstrap)
@@ -55,12 +55,13 @@ choose --timeout ${menu-timeout} --default ${menu-default} selected && goto ${se
 
 ## UPDATE CFG
 :booturl
-echo -n (IP is required for live-boot httpfs/fetch kernel option)
+echo -n (Note: IP is required for live-boot httpfs/fetch kernel option)
 echo
-echo -n Enter new boot-url: ${} && read boot-url
+echo -n Enter new boot-url: && read boot-url
 goto prereq
 
 :cmdline
+echo -n (Docs: https://manpages.debian.org/testing/live-boot-doc/live-boot.7.en.html)
 echo
 echo -n Enter new kernel cmdline: && read cmdline
 goto start
