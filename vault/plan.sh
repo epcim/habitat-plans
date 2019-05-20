@@ -1,4 +1,4 @@
-pkg_origin=epcim
+pkg_origin=core
 pkg_name=vault
 pkg_version=1.1.1
 pkg_description="A tool for managing secrets."
