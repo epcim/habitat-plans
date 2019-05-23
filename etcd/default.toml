@@ -12,7 +12,7 @@ etcd-http-proto = "https"
 
 etcd-discovery = ""
 
-etcd-listen-host-ip = ""
+etcd-listen-host-ip = "0.0.0.0"
 
 etcd-initial-cluster = ""
 
@@ -26,6 +26,7 @@ etcd-peer-cert-file = ""
 etcd-peer-key-file = ""
 etcd-peer-trusted-ca-file = ""
 
+# these are useless as composed as env variables in run hook
 etcd-listen-client-urls = "http://0.0.0.0"
 etcd-listen-peer-urls = "http://0.0.0.0"
 etcd-advertise-client-urls = "http://0.0.0.0"
