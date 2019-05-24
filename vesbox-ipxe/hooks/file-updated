@@ -2,6 +2,6 @@
 exec 2>&1
 cd "{{pkg.svc_path}}"
 
-# move uploaded content to data directory, exclude scripts
-ls files* | xargs -n1 | grep -v '.sh' | xargs --no-run-if-empty -n1 -I{} mv -v files/{} data/{}
+# NOTE, `hab file` is not intended to provide file management interface
+# ls files* | xargs -n1 | egrep '.y[a]ml' | xargs --no-run-if-empty -n1 -I{} mv -v files/{} data/{}
 

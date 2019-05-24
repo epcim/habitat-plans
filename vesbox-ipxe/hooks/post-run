@@ -5,7 +5,7 @@ cd "{{pkg.svc_data_path}}"
 
 # try to fetch latest VES .iso
 # try to mount images
-chown +x {{pkg.svc_files_path}}/*.sh || true
+chmod +x {{pkg.svc_files_path}}/*.sh || true
 bash {{pkg.svc_files_path}}/fetch.sh {{cfg.ves.image_revision}} || true
 bash {{pkg.svc_files_path}}/imgmount.sh {{cfg.ves.image_revision}} || true
 

@@ -32,6 +32,7 @@ item booturl              Configure live boot
 item cmdline              Configure kernel options
 item
 item --gap --             [Advanced options]
+item upstream             Upstream menu
 item reload               Reload menu
 item reboot               Reboot computer
 item --key c config       Configure settings
@@ -104,6 +105,12 @@ goto debian-live
 
 :config
 config
+goto start
+
+# reconfigure for upstream vsb.ipxe menu
+:upstream
+set menu-url http://images.vedge.io/ipxe/vsb.ipxe
+set boot-url http://images.vedge.io/ipxe/boot
 goto start
 
 :reboot

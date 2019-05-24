@@ -17,8 +17,11 @@ offset() {
 
 cd $DATA
 
-# extract
-bunzip2 boot/vsb-$VERSION*.img.bz2 || true
+# extract .bz2, if not yet
+for i in $(ls boot/vsb-$VERSION*.img.bz2); do
+  test -e $(basename $i .bz2) ||\
+    ls $i | xargs -r bunzip2 -kf
+done
 
 set -e
 # find and mount latest .img
