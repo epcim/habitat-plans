@@ -8,6 +8,8 @@ cd "{{pkg.svc_data_path}}"
 
 
 # workaround, for some reson config update || config/user.toml is not treated
-FIRSTNICIP=$(ip -4 addr show | grep inet |grep -v 'inet 127.' | grep -v 'inet 172.16' | awk '{print $2}' |xargs -rn1 | sed -n '1p' | sed 's,/.*,,')
+ALLOWEDRANGES='10|172|192.168|204.15'
+IGNOREDRANGES='10.0.2|172.16|172.28|172.17|127'
+FIRSTNICIP=$(ip -4 addr show | grep "inet " |egrep "$ALLOWEDRANGES" | egrep -v "$IGNOREDRANGES" | awk '{print $2}' |xargs -rn1 | sed -n '1p' | sed 's,/.*,,')
 sed -i "s,-url http://.*:,-url http://$FIRSTNICIP:," {{ pkg.svc_data_path }}/vsb.ipxe
 

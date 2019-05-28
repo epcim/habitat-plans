@@ -7,8 +7,6 @@ VERSION="${1:-{{cfg.ves.image_revision}}}"
 # try to fetch bootstrap images from upstream servers
 test -e boot || mkdir boot
 test -e $BASE/id_rsa_imagesync && RSYNC_KEY="-i $BASE/id_rsa_imagesync" || RSYNC_KEY=""
-rsync -avh -e "ssh -o StrictHostKeyChecking=no $RSYNC_KEY" --include "*ipxe*" --exclude "*" \
-  "imagesync@images.vedge.io:data/" $DATA/ || exit 0
 rsync -avh -e "ssh -o StrictHostKeyChecking=no $RSYNC_KEY" --include "*${VERSION}*.iso" --include "*${VERSION}*.img.bz2" --exclude "*" \
   "imagesync@images.vedge.io:data/boot/" $DATA/boot/ || exit 0
 
