@@ -32,11 +32,11 @@ item booturl              Configure live boot
 item cmdline              Configure kernel options
 item
 item --gap --             [Advanced options]
-item upstream             Upstream menu
-item reload               Reload menu
-item reboot               Reboot computer
-item --key c config       Configure settings
-item shell                Drop to iPXE shell
+item upstream             Menu from images.vedge.io
+item reload               Menu reload
+item --key c config       Configure
+item reboot               Reboot
+item shell                Shell
 item
 item
 item --key 0x08 back             Back to top menu...
@@ -107,11 +107,8 @@ goto debian-live
 config
 goto start
 
-# reconfigure for upstream vsb.ipxe menu
 :upstream
-set menu-url http://images.vedge.io/ipxe/vsb.ipxe
-set boot-url http://images.vedge.io/ipxe/boot
-goto start
+chain --replace --autofree http://images.vedge.io/ipxe/vsb.ipxe || goto failed
 
 :reboot
 reboot
@@ -122,6 +119,10 @@ exit
 :failed
 echo Booting failed, dropping to shell
 goto shell
+
+:shell
+shell
+goto start
 
 :reload
 chain --replace --autofree ${menu-url} ||
