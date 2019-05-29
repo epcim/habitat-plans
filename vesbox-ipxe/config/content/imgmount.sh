@@ -2,6 +2,8 @@
 
 BASE=$(dirname $0)
 DATA=$BASE/../data
+
+# pipe separated list of required revisions to sync
 VERSION="${1:-{{cfg.ves.image_revision}}}"
 
 # get partition offset
@@ -18,7 +20,7 @@ offset() {
 cd $DATA
 
 # extract .bz2, if not yet
-for i in $(ls boot/vsb-$VERSION*.img.bz2); do
+for i in $(ls boot/vsb-*.img.bz2 | egrep "($VERSION)"); do
   test -e $(basename $i .bz2) ||\
     ls $i | xargs -r bunzip2 -kf
 done
@@ -27,7 +29,7 @@ set -e
 # find and mount latest .img
 # mount -o loop .img in data directory to expected netboot folders
 for j in "ves-re" "ves-ce" "ves-re-mini" "ves-ce-mini"; do
-  for i in $(ls boot/vsb-$j*.img 2>/dev/null| grep "$VERSION" | sort | tail -n 1); do
+  for i in $(ls boot/vsb-$j*.img 2>/dev/null| egrep "($VERSION)" | sort | tail -n 1); do
     echo Found: $i
     [[ -e boot/$j ]] || mkdir -p boot/$j
     mount | grep "boot/$j" &&\

@@ -8,7 +8,8 @@
 worker_processes = 4
 
 [ves]
-image_revision = "" # empty = latest fetched
+# pipe separated list of required revisions to sync
+image_revision = ".img.bz2|.iso" # any part of filename
 
 
 [events]
